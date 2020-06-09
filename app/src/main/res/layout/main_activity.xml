@@ -1,85 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:layout_margin="10dp">
-    <TextView
-        android:id="@+id/tvBanks"
-        android:text="@string/beneficiary_banks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    android:layout_margin="10dp"
+    android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/banks"
-        android:layout_below="@+id/tvBanks"
+    <Button
+        android:text="Consultar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/banks"/>
-
-    <TextView
-        android:id="@+id/tvOperators"
-        android:layout_below="@+id/banks"
-        android:text="@string/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Spinner
-        android:id="@+id/operators"
-        android:layout_below="@+id/tvOperators"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/operators"/>
-
-    <!--android:entries="@string/operators"-->
-
-    <EditText
-        android:id="@+id/phone"
-        android:layout_below="@+id/tvOperators"
-        android:layout_toRightOf="@+id/operators"
-        android:layout_alignParentRight="true"
-        android:inputType="number"
-        android:maxLength="7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tvDni"
-        android:layout_below="@+id/phone"
-        android:text="@string/dni"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/dni"
-        android:layout_below="@+id/tvDni"
-        android:layout_width="match_parent"
-        android:inputType="number"
-        android:maxLength="8"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tvMount"
-        android:layout_below="@+id/dni"
-        android:text="@string/mount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/mount"
-        android:layout_below="@+id/tvMount"
-        android:inputType="numberDecimal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:onClick="goToBalance"/>
 
     <Button
         android:text="Pagar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/btnPay"
-        android:onClick="onClickedPay"/>
-</RelativeLayout>
+        android:onClick="goToPay"/>
+</LinearLayout>
