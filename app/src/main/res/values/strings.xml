@@ -1,0 +1,38 @@
+<resources>
+    <string-array name="operators">
+        <item>0412</item>
+        <item>0414</item>
+        <item>0424</item>
+        <item>0416</item>
+        <item>0426</item>
+    </string-array>
+    <string name="app_name">Pago Movil</string>
+    <string name="beneficiary_banks">Banco a transferir</string>
+    <string name="phone">Teléfono</string>
+    <string name="dni">Cedula del beneficiario</string>
+    <string name="mount">Monto</string>
+    <string-array name="banks">
+        <item>100% Banco</item>
+        <item>Bancamiga</item>
+        <item>Bancaribe</item>
+        <item>Banco Agrícola de Venezuela</item>
+        <item>Banco Caroní</item>
+        <item>Banco de Venezuela, S.A.C.A.</item>
+        <item>Banco del Tesoro</item>
+        <item>Banco Plaza</item>
+        <item>Bancrecer</item>
+        <item>Banesco</item>
+        <item>Banfanb</item>
+        <item>Banplus</item>
+        <item>BFC Banco Fondo Común</item>
+        <item>Bicentenario del Pueblo</item>
+        <item>BNC Nacional de Crédito</item>
+        <item>Del Sur</item>
+        <item>Exterior</item>
+        <item>Mercantil</item>
+        <item>Mi Banco</item>
+        <item>Occidental de Descuento</item>
+        <item>Provincial</item>
+        <item>Venezolano de Crédito</item>
+    </string-array>
+</resources>
