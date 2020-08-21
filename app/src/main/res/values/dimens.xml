@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radiusInput">5dp</dimen>
+    <dimen name="shape_padding">8dp</dimen>
+    <dimen name="titule_fragment">22sp</dimen>
+</resources>

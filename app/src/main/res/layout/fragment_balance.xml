@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.pagomovil.viewModels.BalanceViewModel" />
+    </data>
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.BalanceFragment"
+        android:theme="@style/FrameLayoutTheme"
+        android:orientation="vertical">
+        <TextView
+            style="@style/TituleFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/consulta"
+            android:gravity="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/csc"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:drawableTop="@drawable/ic_account"
+                android:onClick="@{() -> viewModel.consultCSC(container)}"
+                android:text="@string/csc" />
+            <Button
+                android:id="@+id/cst"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_credit"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:onClick="@{() -> viewModel.consultCST(container)}"
+                android:text="@string/cst"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/cmc"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_transfer"
+                android:onClick="@{() -> viewModel.consultCMC(container)}"
+                android:text="@string/cmc" />
+
+            <Button
+                android:id="@+id/cmt"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_ope_cart"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:onClick="@{() -> viewModel.consultCMT(container)}"
+                android:text="@string/cmt" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

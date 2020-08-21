@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navHomeBalance">
+    <fragment
+        android:id="@+id/navHomeBalance"
+        android:name="com.example.pagomovil.views.BalanceFragment"
+        android:label="fragment_balance"
+        tools:layout="@layout/fragment_balance" >
+        <action
+            android:id="@+id/action_balanceFragment_to_navHomePay"
+            app:destination="@id/navHomePay" />
+    </fragment>
+    <fragment
+        android:id="@+id/navHomePay"
+        android:name="com.example.pagomovil.views.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_navHomePay_to_navHomeService"
+            app:destination="@id/navHomeService" />
+    </fragment>
+    <fragment
+        android:id="@+id/navHomeService"
+        android:name="com.example.pagomovil.views.ServicesFragment"
+        android:label="fragment_services"
+        tools:layout="@layout/fragment_services" />
+
+
+</navigation>
