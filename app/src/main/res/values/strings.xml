@@ -14,4 +14,8 @@
     <string name="consulta">Consulta</string>
     <string name="pagos">Pagos</string>
     <string name="servicios">Servicios</string>
+    <string name="service">Servicio</string>
+    <string name="alias">Alias o el número de contrato</string>
+    <string name="pay_service">Pago de servicios</string>
+    <string name="transfers">Trasnferencias</string>
 </resources>

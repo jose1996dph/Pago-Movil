@@ -27,7 +27,7 @@ class PaymentFragment : Fragment() {
     }
 
     private fun setupBinding(container: ViewGroup?) : View? {
-        var fragmentPaymentBinding: com.example.pagomovil.databinding.FragmentPaymentBinding
+        val fragmentPaymentBinding: com.example.pagomovil.databinding.FragmentPaymentBinding
                 = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_payment, container, false)
 
         this.viewModel = ViewModelProvider(this).get(PayViewModel::class.java)

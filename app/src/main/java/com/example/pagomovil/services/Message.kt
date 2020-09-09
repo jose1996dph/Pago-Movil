@@ -12,7 +12,7 @@ class Message (val body: String, val number: String) {
             val sms: SmsManager = SmsManager.getDefault()
             sms.sendTextMessage(number, null, body, null, null)
         } catch (e: Exception) {
-            Log.e("ERROR", e.message)
+            Log.e("ERROR", e.message ?: "")
         }
     }
 }

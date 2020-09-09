@@ -6,18 +6,75 @@
         <variable
             name="viewModel"
             type="com.example.pagomovil.viewModels.ServicesViewModel" />
-
     </data>
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:theme="@style/FrameLayoutTheme"
         tools:context=".views.ServicesFragment">
 
         <TextView
-            android:text="@string/beneficiary_banks"
+            android:id="@+id/title"
+            style="@style/TitleFragment"
+            android:gravity="center"
+            android:text="@string/pay_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/service"
+            android:layout_below="@+id/title"/>
+        <Spinner
+            android:id="@+id/sService"
+            android:background="@drawable/input_form"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvService"
+            android:selection="@={viewModel.servicePosition}"/>
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvAlias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alias"
+            android:layout_below="@+id/sService"
+            android:labelFor="@+id/alias"/>
+        <EditText
+            android:id="@+id/alias"
+            android:text="@={viewModel.alias}"
+            android:background="@drawable/input_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAlias"/>
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvMount"
+            android:text="@string/mount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/alias"
+            android:labelFor="@+id/mount"/>
+
+        <EditText
+            android:id="@+id/mount"
+            android:background="@drawable/input_form"
+            android:text="@={viewModel.mount}"
+            android:layout_below="@+id/tvMount"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btnPay"
+            android:text="@string/pagar"
+            android:onClick="@{(v) -> viewModel.doPay(v)}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:ignore="HardcodedText" />
     </RelativeLayout>
 </layout>
