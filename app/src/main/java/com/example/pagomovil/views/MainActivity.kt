@@ -36,18 +36,4 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.SEND_SMS), 1000)
         }
     }
-
-/*
-    private lateinit var viewModel: MainViewModel
-
-
-    private fun setupBinding(){
-        var mainActivityBinding: com.example.pagomovil.databinding.MainActivityBinding
-                = DataBindingUtil.setContentView(this, R.layout.main_activity)
-
-        this.viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        mainActivityBinding.viewModel = this.viewModel
-    }
-*/
 }
