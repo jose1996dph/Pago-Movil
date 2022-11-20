@@ -5,30 +5,49 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.pagomovil.R
+import com.example.pagomovil.utilis.app
+import com.example.pagomovil.utilis.getViewModel
 import com.example.pagomovil.viewModels.ServicesViewModel
+import com.example.pagomovil.viewModels.ViewModelComponent
+import com.example.pagomovil.viewModels.ViewModelModule
 
 class ServicesFragment : Fragment() {
 
-    private lateinit var viewModel: ServicesViewModel
+    private lateinit var viewModelComponent: ViewModelComponent
+
+    private val viewModel: ServicesViewModel by lazy {
+        getViewModel { viewModelComponent.servicesViewModel }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        viewModelComponent = requireContext().app.component.inject(ViewModelModule())
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        setupActivity()
+        // Inflate the layout for this fragment
+        return setupBinding(container)
+    }
 
+    private fun setupActivity(){
+        val title = requireActivity().findViewById<Toolbar>(R.id.toolBar)
+        title.title = getString(R.string.service)
+    }
+
+    private fun setupBinding(container:  ViewGroup?): View{
         val fragmentServicesBinding: com.example.pagomovil.databinding.FragmentServicesBinding
                 = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_services, container, false)
-
-        this.viewModel = ViewModelProvider(this).get(ServicesViewModel::class.java)
 
         fragmentServicesBinding.viewModel = this.viewModel
 
         setupSpinners(fragmentServicesBinding.root)
 
-        // Inflate the layout for this fragment
         return fragmentServicesBinding.root
     }
 
@@ -39,5 +58,34 @@ class ServicesFragment : Fragment() {
             adapterService.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             adapter = adapterService
         }
+
+         val alias = view.findViewById<EditText>(R.id.alias);
+        viewModel.alias.observe(viewLifecycleOwner, {
+            if (it != alias?.text.toString()){
+                alias?.setText(it)
+            }
+        })
+
+        val mount = view.findViewById<EditText>(R.id.mount);
+        viewModel.mount.observe(viewLifecycleOwner, {
+            if (it != mount?.text.toString()){
+                mount?.setText(it)
+            }
+        })
+
+        val name = view.findViewById<EditText>(R.id.name)
+        viewModel.name.observe(viewLifecycleOwner,  {
+            if (it != name.text.toString()){
+                name.setText(it)
+            }
+        })
+
+        val saveContact = view.findViewById<CheckBox>(R.id.saveContact)
+        viewModel.saveService.observe(viewLifecycleOwner,  {
+            if (saveContact.isChecked != it){
+                saveContact.isChecked = it
+            }
+            name.visibility = if(it == true) View.VISIBLE else View.GONE
+        })
     }
 }

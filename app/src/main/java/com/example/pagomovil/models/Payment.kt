@@ -1,9 +1,9 @@
 package com.example.pagomovil.models
 
-class Payment {
-    public var bank: Int = 0
-    public var dni: Int = 0
-    public var mount: Double = 0.0
-    public var operator: Int = 0
-    public var phone: Int = 0
-}
+data class Payment (
+    var bank: String,
+    var dni: String,
+    var mount: String,
+    var operator: String,
+    var phone: String
+)

@@ -3,4 +3,5 @@
     <dimen name="radiusInput">5dp</dimen>
     <dimen name="shape_padding">8dp</dimen>
     <dimen name="title_fragment">22sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

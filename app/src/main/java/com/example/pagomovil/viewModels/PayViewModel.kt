@@ -2,24 +2,40 @@ package com.example.pagomovil.viewModels
 
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.pagomovil.BuildConfig
 import com.example.pagomovil.models.Bank
-import com.example.pagomovil.models.BanksNumber
-import com.example.pagomovil.services.Message
+import com.example.pagomovil.models.Contact
+import com.example.pagomovil.usecases.ContactUsecase
+import com.example.pagomovil.usecases.PaymentUsecase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
+class PayViewModel (
+        private val paymentUsecase: PaymentUsecase,
+        private val contactUsecase: ContactUsecase
+) : ViewModel() {
 
-class PayViewModel : ViewModel() {
+    var contactId : Int = 0
 
     var dni: MutableLiveData<String> =  MutableLiveData<String>()
     var phone: MutableLiveData<String> =  MutableLiveData<String>()
     var mount: MutableLiveData<String> =  MutableLiveData<String>()
+    var contactPosition: MutableLiveData<Int> = MutableLiveData<Int>()
     var operatorPosition: MutableLiveData<Int> =  MutableLiveData<Int>()
     var bankPosition: MutableLiveData<Int> = MutableLiveData<Int>()
+    var name: MutableLiveData<String> = MutableLiveData<String>()
+    var saveContact: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    val banks: MutableLiveData<List<Bank>> = MutableLiveData<List<Bank>>()
+    private val banks: MutableLiveData<List<Bank>> = MutableLiveData<List<Bank>>()
     val operators: MutableLiveData<List<String>> = MutableLiveData<List<String>>()
+    private val _contacts = contactUsecase.getAllContacts()
+    val contacts: LiveData<List<Contact>> get() = _contacts
 
     init {
         banks.value = ArrayList<Bank>().apply {
@@ -63,68 +79,60 @@ class PayViewModel : ViewModel() {
         return banks.value?.map { it.name } ?: emptyList<String>()
     }
 
-    fun doPay(v: View) {
+    fun selectContact(contact: Contact) {
+        contactId = contact.id
 
-        val pay: Button = v as Button
-        pay.isEnabled = false
+        banks.value!!.let {
+            for (i in 1..it.size){
+                if (contact.bank == it[i].number){
+                    bankPosition.value = i
+                    break
+                }
+            }
+        }
 
-        val number: String = banks.value?.get(bankPosition.value ?: 0)?.number ?: ""
-        val ope: String =  operators.value?.get(operatorPosition.value ?: 0) ?: ""
-        if (number == "") {
-            pay.isEnabled = true
-            return
-        }
-        if (ope == "") {
-            pay.isEnabled = true
-            return
-        }
-        if (phone.value == null || phone.value?.isEmpty() == true) {
-            pay.isEnabled = true
-            return
-        }
-        if (dni.value == null || dni.value?.isEmpty() == true) {
-            pay.isEnabled = true
-            return
-        }
-        if (this.mount.value == null || this.mount.value?.isEmpty() == true) {
-            pay.isEnabled = true
-            return
-        }
-        // Code here
-        // Code here
-        var mount: String = this.mount.value.toString()
-        mount = editMount(mount)
+        operatorPosition.value = operators.value!!.indexOf(contact.operator)
+        dni.value = contact.dni
+        phone.value = contact.phone
+        name.value = contact.name
+    }
 
-        val text = "Pagar $number $ope${phone.value} ${dni.value} $mount"
+    fun deleteContact(contact: Contact){
+        contactUsecase.deleteContact(contact)
+    }
+
+    fun doPay(view : View) {
+        val number: String? = banks.value?.get(bankPosition.value ?: 0)?.number
+        val operator: String? =  operators.value?.get(operatorPosition.value ?: 0)
 
         try {
-            val message = Message(text, BanksNumber.Venezuela)
-            message.send()
+            paymentUsecase.makePayment(
+                number ?: "",
+                dni.value ?: "",
+                mount.value ?: "",
+                operator ?: "",
+                phone.value ?: "",
+                saveContact.value ?: false,
+                name.value ?: "",
+                    contactId
+            )
+
             this.phone.value = ""
             this.dni.value = ""
             this.mount.value = ""
-        } catch (e: Exception) {
-            Log.e("ERROR", e.message ?: "")
-        } finally {
-            pay.isEnabled = true
-        }
-    }
+            this.name.value = ""
+            this.saveContact.value = false
+            this.contactId = 0
 
-    private fun editMount(mount: String): String {
-        var mount = mount
-        mount = mount.replace(",", "")
-        mount = mount.replace(".", ",")
-        if (mount.contains(",")) {
-            val mounts = mount.split(",".toRegex()).toTypedArray()
-            val decimal = mounts[mounts.size - 1]
-            mount = mounts[0] + ","
-            for (i in 0..1) {
-                mount += if (decimal.length > i) decimal[i] else "0"
+            Toast.makeText(view.context, "Procesando...", Toast.LENGTH_LONG).show()
+        } catch (e: IllegalAccessException) {
+            Toast.makeText(view.context, e.message, Toast.LENGTH_LONG).show()
+            Log.e("ERROR", e.message ?: "")
+        } catch (e: Exception) {
+            if (BuildConfig.DEBUG) {
+                Toast.makeText(view.context, e.message, Toast.LENGTH_LONG).show()
             }
-        } else {
-            mount += ",00"
+            Log.e("ERROR", e.message ?: "")
         }
-        return mount
     }
 }
-

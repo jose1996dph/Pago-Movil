@@ -10,11 +10,14 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <Toolbar
-                android:id="@+id/tbBalance"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary">
+                android:background="@color/colorPrimary"
+                android:title="@string/app_name"
+                app:titleTextColor="@android:color/white">
+                <!--
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -22,7 +25,8 @@
                     android:textColor="#ffffff"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
-            </Toolbar>
+                    -->
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
         <RelativeLayout
             android:layout_width="match_parent"

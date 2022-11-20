@@ -15,6 +15,7 @@
         android:theme="@style/FrameLayoutTheme"
         tools:context=".views.ServicesFragment">
 
+        <!--
         <TextView
             android:id="@+id/title"
             style="@style/TitleFragment"
@@ -22,20 +23,20 @@
             android:text="@string/pay_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+            -->
         <TextView
             style="@style/TitleStyle"
             android:id="@+id/tvService"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/service"
-            android:layout_below="@+id/title"/>
+            android:text="@string/service" />
         <Spinner
             android:id="@+id/sService"
             android:background="@drawable/input_form"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@+id/tvService"
-            android:selection="@={viewModel.servicePosition}"/>
+            android:selection="@={ viewModel.servicePosition }"/>
         <TextView
             style="@style/TitleStyle"
             android:id="@+id/tvAlias"
@@ -44,9 +45,11 @@
             android:text="@string/alias"
             android:layout_below="@+id/sService"
             android:labelFor="@+id/alias"/>
+        <!--            android:text="@={ viewModel.alias }"
+-->
         <EditText
             android:id="@+id/alias"
-            android:text="@={viewModel.alias}"
+            android:text="@={ viewModel.alias }"
             android:background="@drawable/input_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,15 +66,42 @@
         <EditText
             android:id="@+id/mount"
             android:background="@drawable/input_form"
-            android:text="@={viewModel.mount}"
+            android:text="@={ viewModel.mount }"
             android:layout_below="@+id/tvMount"
             android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/saveContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mount"
+            android:checked="@={viewModel.saveService}"
+            android:text="@string/save_contact"/>
+
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvName"
+            android:layout_below="@+id/saveContact"
+            android:text="@string/service_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/mount" />
+
+        <EditText
+            android:id="@+id/name"
+            android:background="@drawable/input_form"
+            android:text="@={viewModel.name}"
+            android:layout_below="@+id/tvName"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/btnPay"
             android:text="@string/pagar"
-            android:onClick="@{(v) -> viewModel.doPay(v)}"
+            android:onClick="@{ () -> viewModel.doPay(container) }"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

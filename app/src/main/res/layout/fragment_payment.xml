@@ -15,6 +15,7 @@
         tools:context=".views.PaymentFragment"
         android:theme="@style/FrameLayoutTheme">
 
+        <!--
         <TextView
             android:id="@+id/tvTitle"
             style="@style/TitleFragment"
@@ -22,14 +23,31 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/transfers"/>
+            -->
+        <!--
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvContact"
+            android:text="@string/contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:labelFor="@+id/sBanks"/>
 
+        <Spinner
+            android:id="@+id/sContact"
+            android:background="@drawable/input_form"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tvContact"
+            android:selectedItemPosition="@={viewModel.contactPosition}"/>
+        -->
         <TextView
             style="@style/TitleStyle"
             android:id="@+id/tvBanks"
             android:text="@string/beneficiary_banks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
             android:labelFor="@+id/sBanks"/>
 
         <Spinner
@@ -86,9 +104,9 @@
             android:text="@={viewModel.dni}"
             android:layout_below="@+id/tvDni"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="number"
-            android:maxLength="8"
-            android:layout_height="wrap_content" />
+            android:maxLength="8" />
 
         <TextView
             style="@style/TitleStyle"
@@ -108,10 +126,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <CheckBox
+            android:id="@+id/saveContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mount"
+            android:checked="@={viewModel.saveContact}"
+            android:text="@string/save_contact"/>
+
+        <TextView
+            style="@style/TitleStyle"
+            android:id="@+id/tvName"
+            android:layout_below="@+id/saveContact"
+            android:text="@string/contact_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/mount"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:background="@drawable/input_form"
+            android:text="@={viewModel.name}"
+            android:layout_below="@+id/tvName"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
         <Button
             android:id="@+id/btnPay"
             android:text="@string/pagar"
-            android:onClick="@{(v) -> viewModel.doPay(v)}"
+            android:onClick="@{() -> viewModel.doPay(container)}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

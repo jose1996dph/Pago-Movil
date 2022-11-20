@@ -1,57 +1,166 @@
 package com.example.pagomovil.views
 
-import android.database.DataSetObserver
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.widget.Toolbar
 import com.example.pagomovil.R
+import com.example.pagomovil.utilis.app
+import com.example.pagomovil.utilis.getViewModel
 import com.example.pagomovil.viewModels.PayViewModel
+import com.example.pagomovil.databinding.FragmentPaymentBinding
+import com.example.pagomovil.viewModels.ViewModelComponent
+import com.example.pagomovil.viewModels.ViewModelModule
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 
 class PaymentFragment : Fragment() {
 
-    private lateinit var viewModel: PayViewModel
+    private lateinit var viewModelComponent: ViewModelComponent
+
+    private val viewModel: PayViewModel by lazy {
+        getViewModel { viewModelComponent.payViewModel }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        viewModelComponent = requireContext().app.component.inject(ViewModelModule())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.payment_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.navContacts -> {
+                showContacts()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setupActivity()
         // Inflate the layout for this fragment
-        return setupBinding(container) //inflater.inflate(R.layout.fragment_payment, container, false)
+        return setupBinding(container)
+    }
+
+    private fun showContacts(){
+        val contacts = viewModel.contacts.value!!
+        val adapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
+        for (contact in contacts){
+            adapter.add(contact.name)
+        }
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(R.string.contacts)
+            .setAdapter(adapter
+            ) { _, which ->
+                viewModel.selectContact(contacts[which])
+            }
+        builder.create()
+        builder.show()
+    }
+
+    private fun setupActivity(){
+        val title = requireActivity().findViewById<Toolbar>(R.id.toolBar)
+        title.title = getString(R.string.transfers)
     }
 
     private fun setupBinding(container: ViewGroup?) : View? {
-        val fragmentPaymentBinding: com.example.pagomovil.databinding.FragmentPaymentBinding
-                = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_payment, container, false)
-
-        this.viewModel = ViewModelProvider(this).get(PayViewModel::class.java)
+        val fragmentPaymentBinding: FragmentPaymentBinding =
+            DataBindingUtil.inflate(
+                layoutInflater,
+                R.layout.fragment_payment,
+                container,
+                false
+        )
 
         fragmentPaymentBinding.viewModel = this.viewModel
 
-        setupSpinners(fragmentPaymentBinding.root)
+        setupBindingElement(fragmentPaymentBinding.root)
 
-        return  fragmentPaymentBinding.root
+        return fragmentPaymentBinding.root
     }
 
-    private fun setupSpinners(view: View){
-        view.findViewById<Spinner>(R.id.sBanks)?.apply {
+    private fun setupBindingElement(view: View){
+        viewModel.contacts.observe(viewLifecycleOwner){ contacts ->
+            for (contact in contacts){
+                Log.d("Contacts", contact.name);
+            }
+        }
+
+        val sBanks =  view.findViewById<Spinner>(R.id.sBanks)?.apply {
             val banks : List<String> = viewModel.getBanksName()
             val adapterBank : ArrayAdapter<String> = ArrayAdapter(view.context, android.R.layout.simple_spinner_dropdown_item, banks)
             adapterBank.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             adapter = adapterBank
         }
+        viewModel.bankPosition.observe(viewLifecycleOwner) {
+            sBanks!!.setSelection(it)
+        }
 
-        view.findViewById<Spinner>(R.id.sOperators)?.apply {
-            val operators : List<String> = viewModel.operators.value?: emptyList<String>()
-            val adapterOpe : ArrayAdapter<String> = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_dropdown_item, operators)
-            adapterOpe.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            adapter = adapterOpe
+        val sOperators = view.findViewById<Spinner>(R.id.sOperators)?.apply {
+            val operators : List<String> = viewModel.operators.value ?: emptyList<String>()
+            val adapterOperator : ArrayAdapter<String> = ArrayAdapter(view.context, android.R.layout.simple_spinner_dropdown_item, operators)
+            adapterOperator.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter = adapterOperator
+        }
+        viewModel.operatorPosition.observe(viewLifecycleOwner) {
+            sOperators!!.setSelection(it)
+        }
+
+        val dni = view.findViewById<EditText>(R.id.dni);
+        viewModel.dni.observe(viewLifecycleOwner) {
+            if (it != dni.text.toString()) {
+                dni?.setText(it)
+            }
+        }
+
+        val phone = view.findViewById<EditText>(R.id.phone);
+        viewModel.phone.observe(viewLifecycleOwner) {
+            if (it != phone.text.toString()) {
+                phone?.setText(it)
+            }
+        }
+
+        val mount = view.findViewById<EditText>(R.id.mount);
+        viewModel.mount.observe(viewLifecycleOwner) {
+            if (it != mount.text.toString()) {
+                mount?.setText(it)
+            }
+        }
+
+        val name = view.findViewById<EditText>(R.id.name)
+        viewModel.name.observe(viewLifecycleOwner
+        ) {
+            if (it != name.text.toString()) {
+                name.setText(it)
+            }
+        }
+
+        val saveContact = view.findViewById<CheckBox>(R.id.saveContact)
+        val saveContactText = view.findViewById<TextView>(R.id.tvName)
+        viewModel.saveContact.observe(viewLifecycleOwner) {
+            if (saveContact.isChecked != it) {
+                saveContact.isChecked = it
+            }
+            name.visibility = if (it == true) View.VISIBLE else View.GONE
+            saveContactText.visibility = if (it == true) View.VISIBLE else View.GONE
         }
     }
 }
+

@@ -21,6 +21,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
+        <!--
         <TextView
             android:id="@+id/title"
             style="@style/TitleFragment"
@@ -31,6 +32,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+            -->
 
             <Button
                 android:id="@+id/csc"
@@ -41,7 +43,8 @@
                 android:onClick="@{() ->  viewModel.consultCSC(container)}"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"/>
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <Button
                 android:id="@+id/cst"
                 android:drawableTop="@drawable/ic_credit"
@@ -51,7 +54,7 @@
                 android:onClick="@{() ->  viewModel.consultCST(container)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/title"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <Button
                 android:id="@+id/cmc"

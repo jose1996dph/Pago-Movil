@@ -1,14 +1,14 @@
 package com.example.pagomovil.viewModels
 
-import android.telephony.SmsManager
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pagomovil.models.BanksNumber
-import com.example.pagomovil.services.Message
+import com.example.pagomovil.usecases.BalanceUsecase
 
-class BalanceViewModel : ViewModel() {
+class BalanceViewModel(
+        private val balanceUsecase: BalanceUsecase
+) : ViewModel() {
     
     fun consultCSC(view: View) {
         sendMessage(view, "CSC")
@@ -25,8 +25,7 @@ class BalanceViewModel : ViewModel() {
 
     private fun sendMessage(view: View, text: String) {
         try {
-            val message = Message(text, BanksNumber.Venezuela)
-            message.send()
+            balanceUsecase.getBalance(text);
             showToast(view, "Procesando...")
         } catch (e: Exception) {
             showToast(view, e.message)
@@ -35,7 +34,7 @@ class BalanceViewModel : ViewModel() {
 
     private fun showToast(view: View?, text: String?) {
         if (view != null)
-            Toast.makeText(view?.getContext(), text, Toast.LENGTH_LONG).show()
+            Toast.makeText(view.context, text, Toast.LENGTH_LONG).show()
     }
 
 }
