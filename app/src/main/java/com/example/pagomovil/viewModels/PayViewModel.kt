@@ -80,21 +80,26 @@ class PayViewModel (
     }
 
     fun selectContact(contact: Contact) {
-        contactId = contact.id
+        try {
+            contactId = contact.id
 
-        banks.value!!.let {
-            for (i in 1..it.size){
-                if (contact.bank == it[i].number){
-                    bankPosition.value = i
-                    break
+            banks.value!!.let {
+                for (i in 0..(it.size - 1)){
+                    if (contact.bank == it[i].number){
+                        bankPosition.value = i
+                        break
+                    }
                 }
             }
-        }
 
-        operatorPosition.value = operators.value!!.indexOf(contact.operator)
-        dni.value = contact.dni
-        phone.value = contact.phone
-        name.value = contact.name
+            operatorPosition.value = operators.value!!.indexOf(contact.operator)
+            dni.value = contact.dni
+            phone.value = contact.phone
+            name.value = contact.name
+
+        } catch (e: Exception) {
+            Log.e("ERROR", e.message ?: "")
+        }
     }
 
     fun deleteContact(contact: Contact){

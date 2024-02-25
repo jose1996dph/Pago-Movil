@@ -41,4 +41,9 @@
         <item name="colorPrimary">#000000</item>
         <item name="colorOnPrimary">@color/colorAccent</item>
     </style>
+    
+    <style name="ItemShadow">
+        <item name="android:ambientShadowAlpha">0.01</item>
+        <item name="android:spotShadowAlpha">0.08</item>
+    </style>
 </resources>

@@ -1,74 +1,77 @@
 package com.example.pagomovil.views
 
+import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pagomovil.R
-import com.example.pagomovil.utilis.app
-import com.example.pagomovil.utilis.getViewModel
-import com.example.pagomovil.viewModels.PayViewModel
-import com.example.pagomovil.viewModels.ViewModelComponent
-import com.example.pagomovil.viewModels.ViewModelModule
-import com.example.pagomovil.views.placeholder.PlaceholderContent
+import com.example.pagomovil.models.Contact
+
 
 /**
  * A fragment representing a list of Items.
  */
-class ContactsFragment : Fragment() {
-
-    private lateinit var viewModelComponent: ViewModelComponent
-
-    private val viewModel: PayViewModel by lazy {
-        getViewModel { viewModelComponent.payViewModel }
-    }
-
+class ContactsFragment(
+    private val contacts: List<Contact>,
+    private val onSelectListener: (Contact) -> Unit,
+    private val onDeleteListener: (Contact) -> Unit
+) : DialogFragment() {
     private var columnCount = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModelComponent = requireContext().app.component.inject(ViewModelModule())
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window!!.requestFeature(Window.FEATURE_NO_TITLE)
+
+        return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
+        if (dialog != null) {
+            dialog.window!!.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_contacts_list, container, false)
 
+        val recyclerViewContracts = view.findViewById<RecyclerView>(R.id.rcContacts)
+
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = ContactRecyclerViewAdapter(viewModel.contacts.value!!,{
-                    viewModel.selectContact(it)
-                }, {
-                    viewModel.deleteContact(it)
-                })
-            }
-        }
+        setContacts(recyclerViewContracts)
+
         return view
     }
 
-    companion object {
+    private fun setContacts(recyclerViewContracts: RecyclerView) {
+        val handlerOnSelectListener = {c: Contact ->  onSelectListener(c); this.dismiss() }
+        val handlerOnDeleteListener = {c: Contact ->  onDeleteListener(c); this.dismiss() }
 
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            ContactsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
+        with(recyclerViewContracts) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = ContactRecyclerViewAdapter(contacts,  handlerOnSelectListener, handlerOnDeleteListener)
+        }
+    }
+
+    companion object {
+        const val TAG = "ContactsDialog"
     }
 }

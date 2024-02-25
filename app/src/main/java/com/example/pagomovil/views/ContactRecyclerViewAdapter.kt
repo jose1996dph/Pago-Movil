@@ -3,7 +3,6 @@ package com.example.pagomovil.views
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import com.example.pagomovil.R
 import com.example.pagomovil.databinding.ItemContactBinding
 import com.example.pagomovil.models.Contact

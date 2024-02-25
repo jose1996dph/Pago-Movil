@@ -71,10 +71,25 @@ class PaymentFragment : Fragment() {
     private fun showContacts(){
         val contacts = viewModel.contacts.value!!
         val adapter = ArrayAdapter<String>(requireContext(), R.layout.support_simple_spinner_dropdown_item)
+
+        if (contacts.isEmpty()) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.contacts))
+                .setMessage("No hay contactos registrados")
+                .setPositiveButton("Aceptar") { _,_ -> }
+                .create()
+                .show()
+            return
+        }
+
         for (contact in contacts){
             adapter.add(contact.name)
         }
 
+        ContactsFragment(contacts, viewModel::selectContact, viewModel::deleteContact)
+            .show(parentFragmentManager, ContactsFragment.TAG)
+
+        /*
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.contacts)
             .setAdapter(adapter
@@ -83,6 +98,7 @@ class PaymentFragment : Fragment() {
             }
         builder.create()
         builder.show()
+        */
     }
 
     private fun setupActivity(){
